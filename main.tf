@@ -57,8 +57,8 @@ resource "aws_eks_cluster" "this" {
 
     content {
       enabled       = local.auto_mode_enabled
-      node_pools    = local.auto_mode_enabled ? try(compute_config.value.node_pools, []) : null
-      node_role_arn = local.auto_mode_enabled && length(try(compute_config.value.node_pools, [])) > 0 ? try(compute_config.value.node_role_arn, aws_iam_role.eks_auto[0].arn, null) : null
+      node_pools    = try(compute_config.value.node_pools, [])
+      node_role_arn = length(try(compute_config.value.node_pools, [])) > 0 ? try(compute_config.value.node_role_arn, aws_iam_role.eks_auto[0].arn, null) : null
     }
   }
 
@@ -848,7 +848,7 @@ resource "aws_eks_identity_provider_config" "this" {
 ################################################################################
 
 locals {
-  create_node_iam_role = local.create && var.create_node_iam_role && local.auto_mode_enabled
+  create_node_iam_role = local.create && var.create_node_iam_role
   node_iam_role_name   = coalesce(var.node_iam_role_name, "${var.cluster_name}-eks-auto")
 }
 
