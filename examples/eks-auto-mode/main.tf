@@ -38,10 +38,6 @@ module "eks" {
 
   enable_cluster_creator_admin_permissions = true
 
-  # Set `bootstrap_self_managed_addons` to false to support disabling auto mode,
-  # without recreating the cluster
-  bootstrap_self_managed_addons = false
-
   cluster_compute_config = {
     enabled    = true
     node_pools = ["general-purpose"]
